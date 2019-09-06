@@ -1,5 +1,24 @@
 const express = require('express')
 const app = express()
+//app.listen(3000)
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+
+server.listen(3000,function(){
+    console.log('socekt io server listening on port 3000')
+})
+const connections = [];
+io.sockets.on('connection', function(socket) {
+    connections.push(socket);
+    console.log(' %s sockets is connected', connections.length);
+    // 접속한 클라이언트의 정보가 수신되면
+    
+    socket.emit('news', { hello: 'world' });
+    socket.on('my other event', function(data) {
+    console.log(data);
+     });
+  });
+
 var path = require('path'); 
 var mysql      = require('mysql');
 var request = require('request');
@@ -316,4 +335,3 @@ app.post("/getUser", auth, function (req, res) {
     });
 })
 
-app.listen(3000)
