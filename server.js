@@ -10,9 +10,14 @@ server.listen(3000,function(){
 const connections = [];
 io.sockets.on('connection', function(socket) {
     connections.push(socket);
+
     console.log(' %s sockets is connected', connections.length);
+    console.log('현재 연결된 회원',socket.id);
+
     // 접속한 클라이언트의 정보가 수신되면
-    
+    socket.on('disconnect', () => {
+        connections.splice(connections.indexOf(socket), 1);
+     });
     socket.emit('news', { hello: 'world' });
     socket.on('my other event', function(data) {
     console.log(data);
