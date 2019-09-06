@@ -196,8 +196,8 @@ app.post('/remitMoney', auth, function(req,res){
     })
 })
 
-app.get('/friends', function (req, res) {
-    res.render('friends')
+app.get('/connect', function (req, res) {
+    res.render('connect')
 })
 
 app.post('/changePre', auth, function (req, res) {
