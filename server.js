@@ -32,7 +32,7 @@ io.sockets.on('connection', function(socket) {
             console.log((i+1)+"번째 회원: "+connections[i].id);
             
         }
-        console.log(connections[1].id)
+        console.log(connections[0].id)
         io.to(connections[1].id).emit('message', connections[1].id);
         //console.log(data);
      });
@@ -95,7 +95,6 @@ app.post('/login', function (req, res) {
                         {
                         userName: result[0].name,
                         userId: result[0].id,
-                        socketId:socketId
                         },
                         tokenKey,
                         {
@@ -120,15 +119,17 @@ app.post('/login', function (req, res) {
 })
 
 app.get('/main', auth, function (req, res) {
+    res.render('main');
     var userId = req.decoded.userId;
-    var userSocket = req.decoded.socketId;
+    var userSocket = socketId;
     var sql="UPDATE test.account SET socketId = ? WHERE (id = ?);"
-    connection.query(sql,[socketId,userId],function(err,result){
+    console.log('여기가메인'+userId+userSocket);
+    connection.query(sql,[userSocket,userId],function(err,result){
         if (err) {
             throw err;
         }
     });
-    res.render('main');    
+        
 })
 
 app.post('/uploadfile', auth, upload.single('myFile'), (req, res, next) => {

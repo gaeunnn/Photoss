@@ -227,7 +227,7 @@
 
 </script>
 <script>
-var socket = io();     
+  
 var qs = getQueryStringObject();
 if(qs.isFace == "false"){
     alert("얼굴인식에 실패했습니다.\n다른 사진을 넣어주세요.");
@@ -257,6 +257,11 @@ function getQueryStringObject() {
 }
 </script>
 <script>
+var socket = io();
+socket.on('message', function (msg) {
+    console.log(msg)
+    alert(msg);
+})
 var camera = document.getElementById('camera');
 var frame = document.getElementById('frame');
 
@@ -336,10 +341,6 @@ $("#camera").click(function (event) {
             }
             else{
                 socket.emit('message special user', { hello: 'world' });
-                socket.on('message', function (msg) {
-                    console.log(msg)
-                    alert(msg);
-                })
             }
         },
         error: function (e) {
