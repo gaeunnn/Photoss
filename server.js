@@ -7,21 +7,34 @@ server.listen(3000,function(){
     console.log('socekt io server listening on port 3000')
 })
 const connections = [];
-const socketId ='';
+var socketId ='';
 
 io.sockets.on('connection', function(socket) {
     connections.push(socket);
     socketId = socket.id;
+
     console.log(' %s sockets is connected', connections.length);
-    console.log('현재 연결된 회원',socket.id);
+    for(i=0;i<connections.length;i++){
+        console.log((i+1)+"번째 회원: "+connections[i].id);
+        
+    }
+    //console.log('현재 연결된 회원',socket.id);
 
     // 접속한 클라이언트의 정보가 수신되면
     socket.on('disconnect', () => {
         connections.splice(connections.indexOf(socket), 1);
      });
-    socket.emit('news', { hello: 'world' });
-    socket.on('my other event', function(data) {
-    console.log(data);
+    //socket.emit('news', { hello: 'world' });
+
+    socket.on('message special user', function(data) {
+        for(i=0;i<connections.length;i++){
+            console.log('special')
+            console.log((i+1)+"번째 회원: "+connections[i].id);
+            
+        }
+        console.log(connections[1].id)
+        io.to(connections[1].id).emit('message', connections[1].id);
+        //console.log(data);
      });
 });
 
@@ -78,13 +91,6 @@ app.post('/login', function (req, res) {
             if (result.length > 0) {
                 var tokenKey = "f$i1nt#ec1hT@oke1n!Key";  //auth.js에 있는 token key와 동일
                 if (result[0].password == userPass) {
-                    //쿼리 페이지
-                    var sql="UPDATE test.account SET socketId = ? WHERE (id = ?);"
-                    connection.query(sql,[socketId,result[0].id],function(err,result){
-                        if (err) {
-                            throw err;
-                        }
-                    });
                     jwt.sign(
                         {
                         userName: result[0].name,
@@ -113,7 +119,15 @@ app.post('/login', function (req, res) {
     })
 })
 
-app.get('/main', function (req, res) {
+app.get('/main', auth, function (req, res) {
+    var userId = req.decoded.userId;
+    var userSocket = req.decoded.socketId;
+    var sql="UPDATE test.account SET socketId = ? WHERE (id = ?);"
+    connection.query(sql,[socketId,userId],function(err,result){
+        if (err) {
+            throw err;
+        }
+    });
     res.render('main');    
 })
 
@@ -188,16 +202,16 @@ app.get('/remit', function(req,res){
     var senderUrl = req.query.senderUrl;
     var url = req.query.url;
     
-    res.render('remit', 
-        {   receiverName : receiverName, 
-            receiverAccount : receiverAccount,
-            receiverBank : receiverBank,
-            senderName : senderName,
-            senderAccount : senderAccount,
-            senderBank : senderBank,
-            senderUrl: senderUrl, 
-            url: url});
-
+    res.render('remit', {
+        receiverName : receiverName, 
+        receiverAccount : receiverAccount,
+        receiverBank : receiverBank,
+        senderName : senderName,
+        senderAccount : senderAccount,
+        senderBank : senderBank,
+        senderUrl: senderUrl, 
+        url: url
+    });
 })
 
 app.post('/remitMoney', auth, function(req,res){
@@ -245,6 +259,41 @@ app.get('/mypage', function (req, res) {
     res.render('mypage')
 })
 
+app.post('/getUserInfo', auth, function(req, res){
+    var userId = req.decoded.userId;
+    var sql = "SELECT * FROM test.account WHERE id = ?";
+
+    connection.query(sql, userId, function(err, result){
+        if(err){
+            throw err;
+        }
+        else{
+            if(result.length > 0){
+                res.json(result);
+            }
+        }
+    })
+})
+
+app.post('/getModify', auth, function(req, res){
+    var id = req.decoded.userId;
+    var userId = req.body.userId;
+    var userName = req.body.userName;
+    var userEmail = req.body.userEmail;
+    var userPass = req.body.userPass;
+    var sql = "UPDATE test.account SET id = ?, name = ?, "
+    + "email = ?, password = ? WHERE id = ?";
+
+    connection.query(sql, [userId, userName, userEmail, userPass, id], function(err, result){
+        if(err){
+            throw err;
+        }
+        else{
+            res.json(1);
+        }
+    })
+})
+
 app.get('/account', function (req, res) {
     res.render('account')
 })
@@ -266,8 +315,8 @@ app.get('/getBalance', auth, function (req, res) {
         + finusernum
         + "&tran_dtime="
         + tran_dtime;
-
     var sql = "SELECT * FROM test.account WHERE id = ?"
+
     connection.query(sql, [userId], function (err, result) {    
         var accessToken = result[0].accessToken;
         var option = {

@@ -68,20 +68,44 @@
         </div>
     </div>     
     
-    <div class="page-content header-clear-large">   
-
+    <div class="page-content header-clear-medium">   
         <link rel="stylesheet" type="text/css" href="styles/blog.css">
         
-        <div class="left-10 right-10">
-            <div class="blog-categories blog-categories-3 bottom-10">
-                <div onclick="economy()"><a id="economy" class="shadow-large round-large"><strong></strong><em>economy</em><span class="bg-red2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/1s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                <div onclick="society()"><a  id="society" class="shadow-large round-large"><strong></strong><em>society</em><span class="bg-green2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/2s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                <div onclick="living()"><a id="living" class="shadow-large round-large"><strong></strong><em>living culture</em><span class="bg-teal-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/3s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                <div onclick="world()"><a id="world" class="shadow-large round-large"><strong></strong><em>world</em><span class="bg-blue2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/4s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                <div onclick="politics()"><a id="politics"  class="shadow-large round-large"><strong></strong><em>politics</em><span class="bg-gray2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/5s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                <div onclick="etc()"><a id="etc" class="shadow-large round-large"><strong></strong><em>etc.</em><span class="bg-blue2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/6s.jpg" class="preload-image responsive-image" alt="img"></a></div>
+        <div class="content-boxed">
+            <div class="footer">
+                <h1 class="center-text uppercase ultrabold fa-3x">회원 정보</h1>
+                <p class="center-text font-11 under-heading bottom-30 color-highlight">
+                    정보를 수정하세요!
+                </p>
+                <div class="input-style has-icon input-style-1 input-required">
+                    <i class="input-icon fa fa-star font-11"></i>
+                    <span>Main Account</span>
+                    <input readonly type="name" id="user_account" placeholder="Main Account">
+                </div> 
+                <div class="input-style has-icon input-style-1 input-required">
+                    <i class="input-icon fa fa-user font-11"></i>
+                    <span>UserId</span>
+                    <input readonly type="name" id="user_id" placeholder="UserId">
+                </div>
+                <div class="input-style has-icon input-style-1 input-required">
+                    <i class="input-icon fa fa-user font-11"></i>
+                    <span>UserName</span>
+                    <input type="name" id="user_name" placeholder="UserName">
+                </div>
+                <div class="input-style has-icon input-style-1 input-required">
+                        <i class="input-icon fa fa-user font-11"></i>
+                        <span>Email</span>
+                        <input type="email" id="user_email" placeholder="Email">
+                    </div>       
+                <div class="input-style has-icon input-style-1 input-required">
+                        <i class="input-icon fa fa-lock font-11"></i>
+                        <span>UserPass</span>
+                        <input type="password" id="user_pass" placeholder="UserPass">
+                    </div>       
                 <div class="clear"></div>
-            </div>
+                <a class="button button-full button-m shadow-large button-round-small bg-green1-dark top-30 bottom-0" onclick="confirms()">Confirm</a>
+                <br>
+            </div>    
         </div>
 
         <div class="content-boxed">
@@ -100,9 +124,8 @@
                 <p class="footer-links"><a href="#">Privacy Policy</a> | <a href="#">Terms and Conditions</a> | <a href="#" class="back-to-top"> Back to Top</a></p>
                 <div class="clear"></div>
             </div>    
-        </div>
+        </div>   
     </div>
-    <!-- Page Content Class Ends Here-->
 
     <!--Menu Settings-->
     <div id="menu-settings" class="menu menu-box-bottom menu-box-detached round-large" data-menu-height="310" data-menu-effect="menu-over">
@@ -112,13 +135,13 @@
             <div class="toggle-with-icon">
                 <i class="toggle-icon round-tiny fa fa-moon bg-red2-dark color-white"></i>
                 <a href="#" class="toggle-switch toggle-ios toggle-off" 
-                   data-toggle-theme
-                   data-toggle-height="27"
-                   data-toggle-width="50"
-                   data-toggle-content="toggle-content-1"
-                   data-toggle-checkbox="toggle-checkbox-1"
-                   data-bg-on="bg-green1-dark" 
-                   data-bg-off="">
+                    data-toggle-theme
+                    data-toggle-height="27"
+                    data-toggle-width="50"
+                    data-toggle-content="toggle-content-1"
+                    data-toggle-checkbox="toggle-checkbox-1"
+                    data-bg-on="bg-green1-dark" 
+                    data-bg-off="">
                     <span class="color-theme regularbold font-13">Dark Mode</span>
                     <strong></strong>
                     <u></u>
@@ -237,105 +260,54 @@
         } else {
         }
     }
-</script>
-<script>
-    var jwtToken = sessionStorage.getItem('jwtToken');
-    function economy(){
+
+    //회원정보 수정
+    function confirms(){
+        var currentIp = location.host;
+        var jwtToken = sessionStorage.getItem('jwtToken');
+
         $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
+            url: "http://" + currentIp + "/getModify",
+            type: 'POST',
             headers: {
                 'x-access-token': jwtToken
             },
-            data : {
-                pre : '0'
+            data: {
+                userId: $('#user_id').val(),
+                userName: $('#user_name').val(),
+                userEmail: $('#user_email').val(),
+                userPass: $('#user_pass').val()
             },
             success: function(data){
-                alert('관심사가 "경제" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
-    }
-    function society(){
-        $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
-            headers: {
-                'x-access-token': jwtToken
+                alert('회원정보가 변경되었습니다.');
             },
-            data : {
-                pre : '1'
-            },
-            success: function(data){
-                alert('관심사가 "사회" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
-    }
-    function living(){
-        $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
-            headers: {
-                'x-access-token': jwtToken
-            },
-            data : {
-                pre : '2'
-            },
-            success: function(data){
-                alert('관심사가 "생활 문화" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
+            error: function(e){
+                alert(e);
+            }
+        })
     }
 
-    function politics(){
-        $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
-            headers: {
-                'x-access-token': jwtToken
-            },
-            data : {
-                pre : '3'
-            },
-            success: function(data){
-                alert('관심사가 "정치" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
-    }
-    function world(){
-        $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
-            headers: {
-                'x-access-token': jwtToken
-            },
-            data : {
-                pre : '4'
-            },
-            success: function(data){
-                alert('관심사가 "세계" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
-    }
-    function etc(){
-        $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
-            headers: {
-                'x-access-token': jwtToken
-            },
-            data : {
-                pre : '5'
-            },
-            success: function(data){
-                alert('관심사가 "기타" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
-    }
+    //DB조회해서 input field에 회원정보 기입
+    var jwtToken = sessionStorage.getItem('jwtToken');
+    var currentIp = location.host;
+
+    $.ajax({
+        url: "http://" + currentIp + "/getUserInfo",
+        type: "POST",
+        headers: {
+            'x-access-token': jwtToken
+        },
+        data: {},
+        success: function(data){
+            $('#user_account').val(data[0].account);
+            $('#user_id').val(data[0].id);
+            $('#user_name').val(data[0].name)
+            $('#user_email').val(data[0].email);
+            $('#user_pass').val(data[0].password);
+        },
+        error: function(e){
+            alert(e);
+        }
+    })
 </script>
 </body>

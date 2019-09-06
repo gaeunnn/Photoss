@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="styles/framework.css">
 <link rel="stylesheet" type="text/css" href="fonts/css/fontawesome-all.min.css">    
 </head>
-
+<script src="/socket.io/socket.io.js"></script>
 <body class="theme-light" data-background="none" data-highlight="blue2">
         
 <div id="page">
@@ -71,15 +71,15 @@
         <link rel="stylesheet" type="text/css" href="styles/blog.css">
         
         <div class="content-boxed">
-                <div class="footer" style="text-align: center;">
-                    <form id='fileUploadForm'>
-                    <img id="frame" style="width:100%">
-                    <input id="File" type="file" name="myFile" accept="image/*" >
-                    <label for="camera"><img src="images/icons/upload.png" style="display: block; margin: 0 auto; width:30px; height: 30px;"></label>
-                    <input type="button" value="upload" id="camera" style="opacity: 0;position: absolute;z-index: -1;" >
-                     </form>
-                    <br>
-                </div>    
+            <div class="footer" style="text-align: center;">
+                <form id='fileUploadForm'>
+                <img id="frame" style="width:100%">
+                <input id="File" type="file" name="myFile" accept="image/*" >
+                <label for="camera"><img src="images/icons/upload.png" style="display: block; margin: 0 auto; width:30px; height: 30px;"></label>
+                <input type="button" value="upload" id="camera" style="opacity: 0;position: absolute;z-index: -1;" >
+                    </form>
+                <br>
+            </div>    
         </div>
 
         <div class="content-boxed">
@@ -226,7 +226,8 @@
 <script>
 
 </script>
-<script>     
+<script>
+var socket = io();     
 var qs = getQueryStringObject();
 if(qs.isFace == "false"){
     alert("얼굴인식에 실패했습니다.\n다른 사진을 넣어주세요.");
@@ -300,7 +301,33 @@ $("#camera").click(function (event) {
         contentType: false,
         //timeout: 600000,
 
+        beforeSend: function () {
+            var width = 0;
+            var height = 0;
+            var left = 0;
+            var top = 0;
+
+            width = 50;
+            height = 50;
+            top = ( $(window).height() - height ) / 2 + $(window).scrollTop();
+            left = ( $(window).width() - width ) / 2 + $(window).scrollLeft();
+
+            if($("#div_ajax_load_image").length != 0) {
+                $("#div_ajax_load_image").css({
+                    "top": top+"px",
+                    "left": left+"px"
+                });
+                $("#div_ajax_load_image").show();
+            }
+            else {
+                $('body').append('<div id="div_ajax_load_image" style="position:absolute; top:' + top + 'px; left:' + left + 'px; width:' + width + 'px; height:' + height + 'px; z-index:9999; background:#f0f0f0; filter:alpha(opacity=50); opacity:alpha*0.5; margin:auto; padding:0; "><img src="images/icons/loading.gif" style="width:50px; height:50px;"></div>');
+            }
+        },
+        complete: function () {
+            $("#div_ajax_load_image").hide();
+        },
         success: function (data) {
+            jQuery("#loading-mask").fadeOut();
             if(data.isFace == false){
                 window.location.href  = '/main?isFace=false'
             }
@@ -308,15 +335,11 @@ $("#camera").click(function (event) {
                 window.location.href = '/main?isUser=false'
             }
             else{
-                window.location.href = 
-                '/remit?receiverName='+data.receiver.name +
-                '&receiverBank='+data.receiver.bank +
-                '&receiverAccount='+data.receiver.account+
-                '&senderName='+data.sender.name+
-                '&senderBank='+data.sender.bank+
-                '&senderAccount='+data.sender.account+
-                '&senderUrl='+data.senderUrl+
-                '&url='+data.url;
+                socket.emit('message special user', { hello: 'world' });
+                socket.on('message', function (msg) {
+                    console.log(msg)
+                    alert(msg);
+                })
             }
         },
         error: function (e) {
