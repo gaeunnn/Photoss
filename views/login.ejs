@@ -195,7 +195,7 @@
 <script>
     $("#loginBtn").click(function(){
         var currentIp = location.host;
-        // var socket = io.connect('192.168.0.26:3000');
+        var socket = io.connect('192.168.0.26:3000');
         $.ajax({
             url : "http://"+currentIp+"/login",
             type : 'post',
