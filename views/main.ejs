@@ -350,6 +350,7 @@ $("#camera").click(function (event) {
                 var url = data.url;
  
                 socket.emit('message special user', { hello: 'world' });
+                
                 socket.on('locate',function (){
                     window.location.href=
                     '/remit?receiverName='+data.receiver.name +

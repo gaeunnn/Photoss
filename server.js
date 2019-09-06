@@ -23,7 +23,6 @@ io.sockets.on('connection', function(socket) {
     socket.on('disconnect', () => {
         connections.splice(connections.indexOf(socket), 1);
     });
-    //socket.emit('news', { hello: 'world' });
 
     socket.on('message special user', function(data) {
         io.to(connections[1].id).emit('message', connections[1].id);    
