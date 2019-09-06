@@ -39,7 +39,6 @@ var connection = mysql.createConnection({
     router: '3306',
     database : 'test'
 });
-/////.//////////giot
 
 connection.connect();
 
@@ -272,7 +271,14 @@ app.get('/getBalance', auth, function (req, res) {
         request(option, function (err, response, body) {
             if (err) throw err;
             else {
-                res.json(JSON.parse(body).balance_amt);
+                var bank = JSON.parse(body).product_name;
+                var account = JSON.parse(body).fintech_use_num;
+                console.log("bank: ", bank);
+                console.log("account: ",account);
+                var sql2 = "UPDATE test.account SET bank = ?, account = ? WHERE id = ?";
+                connection.query(sql2, [bank, account, userId], function (err, result){
+                    res.json(JSON.parse(body).balance_amt);
+                })
             }
         })
     });
