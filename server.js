@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
     router: '3306',
     database : 'test'
 });
-
+//
 connection.connect();
 
 app.set('views', __dirname + '/views');
