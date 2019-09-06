@@ -244,8 +244,8 @@ app.get('/getBalance', auth, function (req, res) {
     //jwt에서 userId값을 가져옴
     var userId = req.decoded.userId;
     //핀테크이용번호
-    var i = req.query.i;
-    console.log(i);
+    var i = parseInt(req.query.i);
+    console.log("index:", i);
     //현재날짜
     var d = new Date();
     var yyyy = d.getFullYear(); var mm = d.getMonth() + 1; var dd = d.getDate();
