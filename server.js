@@ -32,8 +32,8 @@ io.sockets.on('connection', function(socket) {
             console.log((i+1)+"번째 회원: "+connections[i].id);
             
         }
-        console.log(connections[1].id)
-        io.to(connections[1].id).emit('message', connections[1].id);
+        console.log(connections[0].id)
+        io.to(connections[0].id).emit('message', connections[0].id);
         //console.log(data);
      });
 });
@@ -154,7 +154,7 @@ app.post('/uploadfile', auth, upload.single('myFile'), (req, res, next) => {
 
     var option = {
         method : "POST",
-        url : "http://192.168.0.26:5000/sendImg",
+        url : "http://192.168.0.107:5000/sendImg",
         form : {
             ImgPath : "http://"+ip.address()+":3000/uploads/"+ file.originalname,
             originalname : file.originalname,
