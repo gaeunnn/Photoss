@@ -3,7 +3,6 @@ const app = express()
 //app.listen(3000)
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
-/////////////////////////////////////////////////////////////
 server.listen(3000,function(){
     console.log('socekt io server listening on port 3000')
 })
