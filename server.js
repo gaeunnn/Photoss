@@ -9,13 +9,13 @@ var fs = require("fs");
 var jwt = require('jsonwebtoken');
 var auth = require('./auth');
 var connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : '0000',
+    host     : 'database-3.cntdwybawmyt.ap-southeast-1.rds.amazonaws.com',
+    user     : 'photoss',
+    password : '1234567890',
     router: '3306',
-    database : 'test'
+    database : 'testdb'
 });
-//
+
 connection.connect();
 
 app.set('views', __dirname + '/views');
