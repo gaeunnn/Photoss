@@ -8,9 +8,11 @@ server.listen(3000,function(){
     console.log('socekt io server listening on port 3000')
 })
 const connections = [];
+const socketId ='';
+
 io.sockets.on('connection', function(socket) {
     connections.push(socket);
-
+    socketId = socket.id;
     console.log(' %s sockets is connected', connections.length);
     console.log('현재 연결된 회원',socket.id);
 
@@ -80,7 +82,8 @@ app.post('/login', function (req, res) {
                     jwt.sign(
                         {
                         userName: result[0].name,
-                        userId: result[0].id
+                        userId: result[0].id,
+                        socketId:socketId
                         },
                         tokenKey,
                         {
@@ -104,7 +107,7 @@ app.post('/login', function (req, res) {
     })
 })
 
-app.get('/main', function (req, res) {
+app.get('/main', auth,function (req, res) {
     res.render('main');    
 })
 
