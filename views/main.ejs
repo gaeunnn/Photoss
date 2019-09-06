@@ -259,7 +259,6 @@ function getQueryStringObject() {
 <script>
 var socket = io();
 socket.on('message', function (msg) {
-    console.log(msg)
     var result = confirm('승인하시겠습니까?');
     socket.emit('reMessage', result);
 })

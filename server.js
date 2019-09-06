@@ -18,35 +18,26 @@ io.sockets.on('connection', function(socket) {
         console.log((i+1)+"번째 회원: "+connections[i].id);
         
     }
-    //console.log('현재 연결된 회원',socket.id);
 
     // 접속한 클라이언트의 정보가 수신되면
     socket.on('disconnect', () => {
         connections.splice(connections.indexOf(socket), 1);
-     });
+    });
     //socket.emit('news', { hello: 'world' });
 
     socket.on('message special user', function(data) {
-        for(i=0;i<connections.length;i++){
-            console.log('special')
-            console.log((i+1)+"번째 회원: "+connections[i].id);
-            
-        }
-        console.log(connections[0].id)
-        io.to(connections[1].id).emit('message', connections[1].id);
-        //console.log(data);
-    
-     });
-     socket.on('reMessage', (data) => {
-        console.log(data);
+        io.to(connections[1].id).emit('message', connections[1].id);    
+    });
+
+    socket.on('reMessage', (data) => {
         if(data==true){
             io.to(connections[0].id).emit('locate',data);
         }
-     });
+    });
 });
 
 var path = require('path'); 
-var mysql      = require('mysql');
+var mysql = require('mysql');
 var request = require('request');
 const bodyParser= require('body-parser')
 const multer = require('multer');
@@ -130,7 +121,7 @@ app.get('/main', auth, function (req, res) {
     var userId = req.decoded.userId;
     var userSocket = socketId;
     var sql="UPDATE test.account SET socketId = ? WHERE (id = ?);"
-    console.log('여기가메인'+userId+userSocket);
+
     connection.query(sql,[userSocket,userId],function(err,result){
         if (err) {
             throw err;
