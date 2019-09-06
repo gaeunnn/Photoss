@@ -253,10 +253,7 @@ app.get('/getBalance', auth, function (req, res) {
     if (mi < 10) mi = '0' + mi; if (sec < 10) sec = '0' + sec;
     var tran_dtime = yyyy + mm + dd + hh + mi + sec;
 
-    var getTokenUrl = "https://testapi.open-platform.or.kr/v1.0/account/balance?fintech_use_num="
-        + finusernum
-        + "&tran_dtime="
-        + tran_dtime;
+    var getTokenUrl = "https://testapi.open-platform.or.kr/user/me?user_seq_no=1100035344"
 
     var sql = "SELECT * FROM test.account WHERE id = ?"
     connection.query(sql, [userId], function (err, result) {    
@@ -271,13 +268,15 @@ app.get('/getBalance', auth, function (req, res) {
         request(option, function (err, response, body) {
             if (err) throw err;
             else {
-                var bank = JSON.parse(body).product_name;
-                var account = JSON.parse(body).fintech_use_num;
+                var bank = JSON.parse(body).res_list[0].bank_name;
+                var account = JSON.parse(body).res_list[0].account_num_masked;
                 console.log("bank: ", bank);
                 console.log("account: ",account);
                 var sql2 = "UPDATE test.account SET bank = ?, account = ? WHERE id = ?";
                 connection.query(sql2, [bank, account, userId], function (err, result){
+                    console.log(1);
                     res.json(JSON.parse(body).balance_amt);
+                    console.log(2);
                 })
             }
         })

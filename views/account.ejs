@@ -60,7 +60,7 @@ function logout(){
                 '    <div data-height="150" style="height : 150px" class="caption caption-margins round-medium shadow-large">\n' +
                 '        <div class="caption-center right-15 top-15 text-right">\n' +
                 '            <Button onclick="getBalance(\'' + resultElement.fintech_use_num + '\')" class="button button-xs button-round-huge bg-highlight">잔액조회</Button>\n' +
-                '            <Button onclick="mainAccount(\'' + resultElement.fintech_use_num + '\')" class="button button-xs button-round-huge bg-highlight">주계좌설정</Button>\n' +
+                '            <Button onclick="mainAccount(\'' + i + '\')" class="button button-xs button-round-huge bg-highlight">주계좌설정</Button>\n' +
                 '        </div>\n' +
                 '        <div class="caption-center left-15 text-left">\n' +
                 '            <h1 class="color-white bolder">' + resultElement.account_alias + '</h1>\n' +
@@ -111,7 +111,7 @@ function logout(){
                 'x-access-token': jwtToken
             },
             data : {
-                finusernum: finusenum
+                i: i
             },
             success: function(data){
                 alert("main account가 변경되었습니다");
