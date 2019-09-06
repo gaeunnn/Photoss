@@ -78,6 +78,7 @@ app.post('/login', function (req, res) {
             if (result.length > 0) {
                 var tokenKey = "f$i1nt#ec1hT@oke1n!Key";  //auth.js에 있는 token key와 동일
                 if (result[0].password == userPass) {
+                    //쿼리 페이지
                     jwt.sign(
                         {
                         userName: result[0].name,
@@ -106,7 +107,7 @@ app.post('/login', function (req, res) {
     })
 })
 
-app.get('/main', auth,function (req, res) {
+app.get('/main', function (req, res) {
     res.render('main');    
 })
 
