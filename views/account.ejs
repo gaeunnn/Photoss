@@ -57,21 +57,19 @@
             for (var i = 0; i < resultList.length; i++) {
                 var resultElement = resultList[i];
                 $("#cardList").append(
-                    '    <div data-height="150" style="height : 150px" class="caption caption-margins round-medium shadow-large">\n' +
-                    '        <div class="caption-center right-15 top-15 text-right">\n' +
-                    '            <Button onclick="getBalance(\'' + resultElement.fintech_use_num + '\')" class="button button-xs button-round-huge bg-highlight">잔액조회</Button>\n' +
-                    '            <Button class="button button-xs button-round-huge bg-highlight">결제</Button>\n' +
-                    '            <Button onclick="deleteAccount(\'' + resultElement.fintech_use_num + '\')" class="button button-xs button-round-huge bg-highlight">X</Button>\n' +
-                    '        </div>\n' +
-                    '        <div class="caption-center left-15 text-left">\n' +
-                    '            <h1 class="color-white bolder">' + resultElement.account_alias + '</h1>\n' +
-                    '            <p class="under-heading color-white opacity-90 bottom-0">\n' +
-                    '                ' + resultElement.account_num_masked +
-                    '            </p>\n' +
-                    '        </div>\n' +
-                    '        <div class="caption-overlay bg-black opacity-70"></div>\n' +
-                    '        <div class="caption-bg bg-18"></div>\n' +
-                    '    </div>\n'
+                '    <div data-height="150" style="height : 150px" class="caption caption-margins round-medium shadow-large">\n' +
+                '        <div class="caption-center right-15 top-15 text-right">\n' +
+                '            <Button onclick="getBalance(\'' + resultElement.fintech_use_num + '\')" class="button button-xs button-round-huge bg-highlight">잔액조회</Button>\n' +
+                '        </div>\n' +
+                '        <div class="caption-center left-15 text-left">\n' +
+                '            <h1 class="color-white bolder">' + resultElement.account_alias + '</h1>\n' +
+                '            <p class="under-heading color-white opacity-90 bottom-0">\n' +
+                '                ' + resultElement.account_num_masked +
+                '            </p>\n' +
+                '        </div>\n' +
+                '        <div class="caption-overlay bg-black opacity-70"></div>\n' +
+                '        <div class="caption-bg bg-18"></div>\n' +
+                '    </div>\n'
                 )
             }
         },
