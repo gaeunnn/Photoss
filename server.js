@@ -33,8 +33,15 @@ io.sockets.on('connection', function(socket) {
             
         }
         console.log(connections[0].id)
-        io.to(connections[0].id).emit('message', connections[0].id);
+        io.to(connections[1].id).emit('message', connections[1].id);
         //console.log(data);
+    
+     });
+     socket.on('reMessage', (data) => {
+        console.log(data);
+        if(data==true){
+            io.to(connections[0].id).emit('locate',data);
+        }
      });
 });
 
@@ -95,7 +102,6 @@ app.post('/login', function (req, res) {
                         {
                         userName: result[0].name,
                         userId: result[0].id,
-                        socketId:socketId
                         },
                         tokenKey,
                         {
@@ -120,15 +126,17 @@ app.post('/login', function (req, res) {
 })
 
 app.get('/main', auth, function (req, res) {
+    res.render('main');
     var userId = req.decoded.userId;
-    var userSocket = req.decoded.socketId;
+    var userSocket = socketId;
     var sql="UPDATE test.account SET socketId = ? WHERE (id = ?);"
-    connection.query(sql,[socketId,userId],function(err,result){
+    console.log('여기가메인'+userId+userSocket);
+    connection.query(sql,[userSocket,userId],function(err,result){
         if (err) {
             throw err;
         }
     });
-    res.render('main');    
+        
 })
 
 app.post('/uploadfile', auth, upload.single('myFile'), (req, res, next) => {
@@ -154,7 +162,7 @@ app.post('/uploadfile', auth, upload.single('myFile'), (req, res, next) => {
 
     var option = {
         method : "POST",
-        url : "http://192.168.0.107:5000/sendImg",
+        url : "http://192.168.0.26:5000/sendImg",
         form : {
             ImgPath : "http://"+ip.address()+":3000/uploads/"+ file.originalname,
             originalname : file.originalname,
@@ -348,11 +356,12 @@ app.get('/mainAccount', auth, function (req, res) {
     if (mi < 10) mi = '0' + mi; if (sec < 10) sec = '0' + sec;
     var tran_dtime = yyyy + mm + dd + hh + mi + sec;
 
-    var getTokenUrl = "https://testapi.open-platform.or.kr/user/me?user_seq_no=1100035344"
-
     var sql = "SELECT * FROM test.account WHERE id = ?"
-    connection.query(sql, [userId], function (err, result) {    
+    connection.query(sql, [userId], function (err, result) {
+        var userSeqNum = result[0].userseqnum;
         var accessToken = result[0].accessToken;
+        var getTokenUrl = "https://testapi.open-platform.or.kr/user/me?user_seq_no="+userSeqNum;
+
         var option = {
             method: "GET",
             url: getTokenUrl,
@@ -398,4 +407,3 @@ app.post("/getUser", auth, function (req, res) {
         })
     });
 })
-

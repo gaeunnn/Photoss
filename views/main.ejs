@@ -227,7 +227,7 @@
 
 </script>
 <script>
-var socket = io();     
+  
 var qs = getQueryStringObject();
 if(qs.isFace == "false"){
     alert("얼굴인식에 실패했습니다.\n다른 사진을 넣어주세요.");
@@ -257,6 +257,12 @@ function getQueryStringObject() {
 }
 </script>
 <script>
+var socket = io();
+socket.on('message', function (msg) {
+    console.log(msg)
+    var result = confirm('승인하시겠습니까?');
+    socket.emit('reMessage', result);
+})
 var camera = document.getElementById('camera');
 var frame = document.getElementById('frame');
 
@@ -335,10 +341,26 @@ $("#camera").click(function (event) {
                 window.location.href = '/main?isUser=false'
             }
             else{
+                var receiverName=data.receiver.name;
+                var receiverBank=data.receiver.bank;
+                var receiverAccount= data.receiver.account;
+                var senderName= data.sender.name;
+                var senderBank= data.sender.bank;
+                var senderAccount=data.sender.account;
+                var senderUrl = data.senderUrl;
+                var url = data.url;
+ 
                 socket.emit('message special user', { hello: 'world' });
-                socket.on('message', function (msg) {
-                    console.log(msg)
-                    alert(msg);
+                socket.on('locate',function (){
+                    window.location.href=
+                    '/remit?receiverName='+data.receiver.name +
+                    '&receiverBank='+data.receiver.bank +
+                    '&receiverAccount='+data.receiver.account+
+                    '&senderName='+data.sender.name+
+                    '&senderBank='+data.sender.bank+
+                    '&senderAccount='+data.sender.account+
+                    '&senderUrl='+data.senderUrl+
+                    '&url='+data.url;
                 })
             }
         },
