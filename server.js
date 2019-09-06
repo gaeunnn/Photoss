@@ -79,6 +79,12 @@ app.post('/login', function (req, res) {
                 var tokenKey = "f$i1nt#ec1hT@oke1n!Key";  //auth.js에 있는 token key와 동일
                 if (result[0].password == userPass) {
                     //쿼리 페이지
+                    var sql="UPDATE test.account SET socketId = ? WHERE (id = ?);"
+                    connection.query(sql,[socketId,result[0].id],function(err,result){
+                        if (err) {
+                            throw err;
+                        }
+                    });
                     jwt.sign(
                         {
                         userName: result[0].name,
