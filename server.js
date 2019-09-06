@@ -15,6 +15,7 @@ var connection = mysql.createConnection({
     router: '3306',
     database : 'test'
 });
+/////.//////////giot
 
 connection.connect();
 
