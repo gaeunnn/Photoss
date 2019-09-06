@@ -244,7 +244,8 @@ app.get('/getBalance', auth, function (req, res) {
     //jwt에서 userId값을 가져옴
     var userId = req.decoded.userId;
     //핀테크이용번호
-    var finusernum = req.query.finusernum;
+    var i = req.query.i;
+    console.log(i);
     //현재날짜
     var d = new Date();
     var yyyy = d.getFullYear(); var mm = d.getMonth() + 1; var dd = d.getDate();
@@ -268,8 +269,8 @@ app.get('/getBalance', auth, function (req, res) {
         request(option, function (err, response, body) {
             if (err) throw err;
             else {
-                var bank = JSON.parse(body).res_list[0].bank_name;
-                var account = JSON.parse(body).res_list[0].account_num_masked;
+                var bank = JSON.parse(body).res_list[i].bank_name;
+                var account = JSON.parse(body).res_list[i].account_num_masked;
                 console.log("bank: ", bank);
                 console.log("account: ",account);
                 var sql2 = "UPDATE test.account SET bank = ?, account = ? WHERE id = ?";
