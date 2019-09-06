@@ -195,8 +195,7 @@
 <script>
     $("#loginBtn").click(function(){
         var currentIp = location.host;
-        var socket = io.connect('192.168.0.26:3000');
-        console.log(socket)
+        // var socket = io.connect('192.168.0.26:3000');
         $.ajax({
             url : "http://"+currentIp+"/login",
             type : 'post',
@@ -208,17 +207,15 @@
                 sessionStorage.setItem('jwtToken', data);   //jwt 토큰 세션스토리지에 저장
                 if(data == 2){
                     alert("비밀번호가 틀렸습니다.");
-                    //window.location.herf = "/";
+                    window.location.herf = "/";
                 }
                 if(data == 3){
                     alert("존재하지 않는 아이디입니다.");
-                    //window.location.herㅋf = "/";
+                    window.location.herㅋf = "/";
                 }
                 if(data.length > 5){
-                   
-                    //window.location.href = "/main";
+                    window.location.href = "/main";
                     // socket.io 서버에 접속한다
-                    
                 }
             }
         })

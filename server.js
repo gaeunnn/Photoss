@@ -22,7 +22,7 @@ io.sockets.on('connection', function(socket) {
     socket.on('my other event', function(data) {
     console.log(data);
      });
-  });
+});
 
 var path = require('path'); 
 var mysql      = require('mysql');
@@ -244,50 +244,6 @@ app.get('/getBalance', auth, function (req, res) {
     //jwt에서 userId값을 가져옴
     var userId = req.decoded.userId;
     //핀테크이용번호
-    var i = parseInt(req.query.i);
-    console.log("index:", i);
-    //현재날짜
-    var d = new Date();
-    var yyyy = d.getFullYear(); var mm = d.getMonth() + 1; var dd = d.getDate();
-    var hh = d.getHours(); var mi = d.getMinutes(); var sec = d.getSeconds();
-    if (dd < 10) dd = '0' + dd; if (mm < 10) mm = '0' + mm; if (hh < 10) hh = '0' + hh;
-    if (mi < 10) mi = '0' + mi; if (sec < 10) sec = '0' + sec;
-    var tran_dtime = yyyy + mm + dd + hh + mi + sec;
-
-    var getTokenUrl = "https://testapi.open-platform.or.kr/user/me?user_seq_no=1100035344"
-
-    var sql = "SELECT * FROM test.account WHERE id = ?"
-    connection.query(sql, [userId], function (err, result) {    
-        var accessToken = result[0].accessToken;
-        var option = {
-            method: "GET",
-            url: getTokenUrl,
-            headers: {
-                Authorization: "Bearer " + accessToken
-            }
-        }
-        request(option, function (err, response, body) {
-            if (err) throw err;
-            else {
-                var bank = JSON.parse(body).res_list[i].bank_name;
-                var account = JSON.parse(body).res_list[i].account_num_masked;
-                console.log("bank: ", bank);
-                console.log("account: ",account);
-                var sql2 = "UPDATE test.account SET bank = ?, account = ? WHERE id = ?";
-                connection.query(sql2, [bank, account, userId], function (err, result){
-                    console.log(1);
-                    res.json(JSON.parse(body).balance_amt);
-                    console.log(2);
-                })
-            }
-        })
-    });
-})
-
-app.get('/mainAccount', auth, function (req, res) {
-    //jwt에서 userId값을 가져옴
-    var userId = req.decoded.userId;
-    //핀테크이용번호
     var finusernum = req.query.finusernum;
     //현재날짜
     var d = new Date();
@@ -316,6 +272,45 @@ app.get('/mainAccount', auth, function (req, res) {
             if (err) throw err;
             else {
                 res.json(JSON.parse(body).balance_amt);
+            }
+        })
+    });
+})
+
+app.get('/mainAccount', auth, function (req, res) {
+    //jwt에서 userId값을 가져옴
+    var userId = req.decoded.userId;
+    //핀테크이용번호
+    var i = parseInt(req.query.i);
+    //현재날짜
+    var d = new Date();
+    var yyyy = d.getFullYear(); var mm = d.getMonth() + 1; var dd = d.getDate();
+    var hh = d.getHours(); var mi = d.getMinutes(); var sec = d.getSeconds();
+    if (dd < 10) dd = '0' + dd; if (mm < 10) mm = '0' + mm; if (hh < 10) hh = '0' + hh;
+    if (mi < 10) mi = '0' + mi; if (sec < 10) sec = '0' + sec;
+    var tran_dtime = yyyy + mm + dd + hh + mi + sec;
+
+    var getTokenUrl = "https://testapi.open-platform.or.kr/user/me?user_seq_no=1100035344"
+
+    var sql = "SELECT * FROM test.account WHERE id = ?"
+    connection.query(sql, [userId], function (err, result) {    
+        var accessToken = result[0].accessToken;
+        var option = {
+            method: "GET",
+            url: getTokenUrl,
+            headers: {
+                Authorization: "Bearer " + accessToken
+            }
+        }
+        request(option, function (err, response, body) {
+            if (err) throw err;
+            else {
+                var bank = JSON.parse(body).res_list[i].bank_name;
+                var account = JSON.parse(body).res_list[i].account_num_masked;
+                var sql2 = "UPDATE test.account SET bank = ?, account = ? WHERE id = ?";
+                connection.query(sql2, [bank, account, userId], function (err, result){
+                    res.send(JSON.parse(body).balance_amt);
+                })
             }
         })
     });
