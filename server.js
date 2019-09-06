@@ -254,6 +254,43 @@ app.get('/getBalance', auth, function (req, res) {
     });
 })
 
+app.get('/mainAccount', auth, function (req, res) {
+    //jwt에서 userId값을 가져옴
+    var userId = req.decoded.userId;
+    //핀테크이용번호
+    var finusernum = req.query.finusernum;
+    //현재날짜
+    var d = new Date();
+    var yyyy = d.getFullYear(); var mm = d.getMonth() + 1; var dd = d.getDate();
+    var hh = d.getHours(); var mi = d.getMinutes(); var sec = d.getSeconds();
+    if (dd < 10) dd = '0' + dd; if (mm < 10) mm = '0' + mm; if (hh < 10) hh = '0' + hh;
+    if (mi < 10) mi = '0' + mi; if (sec < 10) sec = '0' + sec;
+    var tran_dtime = yyyy + mm + dd + hh + mi + sec;
+
+    var getTokenUrl = "https://testapi.open-platform.or.kr/v1.0/account/balance?fintech_use_num="
+        + finusernum
+        + "&tran_dtime="
+        + tran_dtime;
+
+    var sql = "SELECT * FROM test.account WHERE id = ?"
+    connection.query(sql, [userId], function (err, result) {    
+        var accessToken = result[0].accessToken;
+        var option = {
+            method: "GET",
+            url: getTokenUrl,
+            headers: {
+                Authorization: "Bearer " + accessToken
+            }
+        }
+        request(option, function (err, response, body) {
+            if (err) throw err;
+            else {
+                res.json(JSON.parse(body).balance_amt);
+            }
+        })
+    });
+})
+
 //본인 계좌 연동 정보 가져와서 출력
 app.post("/getUser", auth, function (req, res) {
     //jwt에서 userId값을 가져옴
