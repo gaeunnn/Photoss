@@ -43,8 +43,10 @@
 </script>
 <script>
     var jwtToken = sessionStorage.getItem('jwtToken');
+    var currentIp = location.host;
+
     $.ajax({
-        url: 'http://192.168.0.6:3000/getUser',
+        url: "http://"+currentIp+"/getUser",
         type: 'POST',
         headers: {
             'x-access-token': jwtToken

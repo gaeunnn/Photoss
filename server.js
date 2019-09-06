@@ -9,9 +9,10 @@ var fs = require("fs");
 var jwt = require('jsonwebtoken');
 var auth = require('./auth');
 var connection = mysql.createConnection({
-    host     : '192.168.0.45',
+    host     : 'localhost',
     user     : 'root',
-    password : '@tqsd087300',
+    password : '0000',
+    router: '3306',
     database : 'test'
 });
 
@@ -35,7 +36,6 @@ var storage = multer.diskStorage({
 })
    
 var upload = multer({ storage: storage })
-var userId = '';
 
 app.get('/', function (req, res) {
     res.render('login')
