@@ -332,7 +332,6 @@ $("#camera").click(function (event) {
             $("#div_ajax_load_image").hide();
         },
         success: function (data) {
-            jQuery("#loading-mask").fadeOut();
             if(data.isFace == false){
                 window.location.href  = '/main?isFace=false'
             }
@@ -350,7 +349,7 @@ $("#camera").click(function (event) {
                 var url = data.url;
  
                 socket.emit('message special user', { hello: 'world' });
-                
+
                 socket.on('locate',function (){
                     window.location.href=
                     '/remit?receiverName='+data.receiver.name +
