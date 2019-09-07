@@ -176,8 +176,8 @@ app.post('/remitMoney', auth, function(req,res){
     remitMoney = parseInt(remitMoney);
     var receiverName = req.body.receiverName;
     var senderName = req.body.senderName;
-
-    connection.query("SELECT amount FROM test.account where id = "+userId+";", function(err, senderAmount, fields){
+    
+    connection.query("SELECT amount FROM test.account where id = '"+userId+"';", function(err, senderAmount, fields){
         var senderMoney = senderAmount[0].amount;
         if (senderMoney >= remitMoney){
             // 송금
