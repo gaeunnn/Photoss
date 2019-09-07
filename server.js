@@ -177,7 +177,8 @@ app.post('/remitMoney', auth, function(req,res){
     var receiverName = req.body.receiverName;
     var senderName = req.body.senderName;
 
-    connection.query("SELECT amount FROM test.account where id = "+userId+";", function(err, senderAmount, fields){
+    connection.query("SELECT amount FROM test.account where id = '"+userId+"';", function(err, senderAmount, fields){
+        console.log('센터어마운트'+senderAmount);
         var senderMoney = senderAmount[0].amount;
         if (senderMoney >= remitMoney){
             // 송금
