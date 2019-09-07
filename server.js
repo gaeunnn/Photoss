@@ -177,7 +177,6 @@ app.post('/remitMoney', auth, function(req,res){
     var receiverName = req.body.receiverName;
     var senderName = req.body.senderName;
 
-    
     connection.query("SELECT amount FROM test.account where id = '"+userId+"';", function(err, senderAmount, fields){
 
         var senderMoney = senderAmount[0].amount;
@@ -206,25 +205,9 @@ app.get('/connect', function (req, res) {
 
 app.post('/getConnect', auth, function(req,res){
     var userId = req.decoded.userId;
-
-    connection.query("SELECT amount FROM test.account where id = '"+userId+"';", function(err, senderAmount, fields){
-        var senderMoney = senderAmount[0].amount;
-        if (senderMoney >= remitMoney){
-            // 송금
-            var senderUpdateMoney = senderMoney-remitMoney;
-            connection.query("UPDATE test.account SET amount = ? WHERE (id = ?);",[senderUpdateMoney,userId] ,function(err, result, fields){
-                connection.query("select amount from test.account where name = ?;",receiverName, function(err, receiverAmount, fields){
-                    var receiverUpdateMoney = remitMoney + receiverAmount[0].amount;
-                    connection.query("update test.account SET amount =? where (name = ?);",[receiverUpdateMoney,receiverName] ,function(err, result, fields){
-                        res.json(true);
-                    })
-                })
-            })
-        }
-        else{
-            // 잔액 부족
-            res.json(false);
-        }
+    console.log(userId);
+    connection.query("SELECT * FROM test.friends where userId = '"+userId+"';", function(err, friends, fields){
+        res.send(friends);
     })
 })
 

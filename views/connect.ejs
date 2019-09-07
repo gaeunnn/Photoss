@@ -192,6 +192,9 @@
     }
 </script>
 <script>
+    var jwtToken = sessionStorage.getItem('jwtToken');
+    var currentIp = location.host;
+    console.log(currentIp);
 $.ajax({
     url: "http://"+currentIp+"/getConnect",
     type: 'POST',
@@ -199,36 +202,16 @@ $.ajax({
         'x-access-token': jwtToken
     },
     data: {},
-    success: function (data) {  //server.js에서 response해서 받은 파싱 값 res.json(JSON.parse(body))해서 res_list 가져옴 
-        var resultList = data.res_list;
-        for (var i = 0; i < resultList.length; i++) {
-            var resultElement = resultList[i];
+    success: function (friends) {  //server.js에서 response해서 받은 파싱 값 res.json(JSON.parse(body))해서 res_list 가져옴 
+        for (var i = 0; i < friends.length; i++) {
+            var url = friends[i].friendUrl;
             $("#cardList").append(
-                <div class="left-10 right-10">
-                    <div class="blog-categories blog-categories-3 bottom-10">
-                        <div onclick="economy()" ontouchend="economy()"><a id="economy" class="shadow-large round-large"><strong></strong><em>economy</em><span class="bg-red2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/1s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                        <div onclick="society()" ontouchend="society()"><a  id="society" class="shadow-large round-large"><strong></strong><em>society</em><span class="bg-green2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/2s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                        <div onclick="living()" ontouchend="living()"><a id="living" class="shadow-large round-large"><strong></strong><em>living culture</em><span class="bg-teal-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/3s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                        <div onclick="world()" ontouchend="world()"><a id="world" class="shadow-large round-large"><strong></strong><em>world</em><span class="bg-blue2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/4s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                        <div onclick="politics()" ontouchend="politics()"><a id="politics"  class="shadow-large round-large"><strong></strong><em>politics</em><span class="bg-gray2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/5s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                        <div onclick="etc()" ontouchend="etc()"><a id="etc" class="shadow-large round-large"><strong></strong><em>etc.</em><span class="bg-blue2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/6s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-            '    <div data-height="150" style="height : 150px" class="caption caption-margins round-medium shadow-large">\n' +
-            '        <div class="caption-center right-15 top-15 text-right">\n' +
-            '            <Button onclick="getBalance(\'' + resultElement.fintech_use_num + '\')" class="button button-xs button-round-huge bg-highlight">잔액조회</Button>\n' +
-            '            <Button onclick="mainAccount(\'' + String(i) + '\')" class="button button-xs button-round-huge bg-highlight">주계좌설정</Button>\n' +
-            '        </div>\n' +
-            '        <div class="caption-center left-15 text-left">\n' +
-            '            <h1 class="color-white bolder">' + resultElement.bank_name + '</h1>\n' +
-            '            <p class="under-heading color-white opacity-90 bottom-0">\n' +
-            '                ' + resultElement.account_num_masked +
-            '            </p>\n' +
-            '        </div>\n' +
-            '        <div class="caption-overlay bg-black opacity-70"></div>\n' +
-            '        <div class="caption-bg bg-18"></div>\n' +
-            '    </div>\n'
+                '<div class="left-10 right-10">\n' +
+                '    <div class="blog-categories blog-categories-3 bottom-10">\n' +
+                '        <div onclick="economy()" ontouchend="economy()"><a id="friend" class="shadow-large round-large"><img src='+url+' data-src='+url+' class="preload-image responsive-image" alt="img" style="float: left"></a></div>\n' +
+                '        <div class="clear"></div>\n' +
+                '    </div>\n' +
+                '</div>\n'
             )
         }
     },
