@@ -204,6 +204,30 @@ app.get('/connect', function (req, res) {
     res.render('connect')
 })
 
+app.post('/getConnect', auth, function(req,res){
+    var userId = req.decoded.userId;
+
+    connection.query("SELECT amount FROM test.account where id = '"+userId+"';", function(err, senderAmount, fields){
+        var senderMoney = senderAmount[0].amount;
+        if (senderMoney >= remitMoney){
+            // 송금
+            var senderUpdateMoney = senderMoney-remitMoney;
+            connection.query("UPDATE test.account SET amount = ? WHERE (id = ?);",[senderUpdateMoney,userId] ,function(err, result, fields){
+                connection.query("select amount from test.account where name = ?;",receiverName, function(err, receiverAmount, fields){
+                    var receiverUpdateMoney = remitMoney + receiverAmount[0].amount;
+                    connection.query("update test.account SET amount =? where (name = ?);",[receiverUpdateMoney,receiverName] ,function(err, result, fields){
+                        res.json(true);
+                    })
+                })
+            })
+        }
+        else{
+            // 잔액 부족
+            res.json(false);
+        }
+    })
+})
+
 app.post('/changePre', auth, function (req, res) {
     var userId = req.decoded.userId;
     connection.query("UPDATE `test`.`account` SET `preference` = '"+req.body.pre+"' WHERE (`id` = '"+userId+"');", function(err, sender, fields){

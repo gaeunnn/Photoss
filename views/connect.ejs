@@ -36,20 +36,8 @@
     </div>
     
     <div class="page-content header-clear-large">   
-
         <link rel="stylesheet" type="text/css" href="styles/blog.css">
-        
-        <div class="left-10 right-10">
-            <div class="blog-categories blog-categories-3 bottom-10">
-                <div onclick="economy()" ontouchend="economy()"><a id="economy" class="shadow-large round-large"><strong></strong><em>economy</em><span class="bg-red2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/1s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                <div onclick="society()" ontouchend="society()"><a  id="society" class="shadow-large round-large"><strong></strong><em>society</em><span class="bg-green2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/2s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                <div onclick="living()" ontouchend="living()"><a id="living" class="shadow-large round-large"><strong></strong><em>living culture</em><span class="bg-teal-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/3s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                <div onclick="world()" ontouchend="world()"><a id="world" class="shadow-large round-large"><strong></strong><em>world</em><span class="bg-blue2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/4s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                <div onclick="politics()" ontouchend="politics()"><a id="politics"  class="shadow-large round-large"><strong></strong><em>politics</em><span class="bg-gray2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/5s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                <div onclick="etc()" ontouchend="etc()"><a id="etc" class="shadow-large round-large"><strong></strong><em>etc.</em><span class="bg-blue2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/6s.jpg" class="preload-image responsive-image" alt="img"></a></div>
-                <div class="clear"></div>
-            </div>
-        </div>
+        <div id='cardList'></div>
 
         <div class="content-boxed">
             <div class="footer">
@@ -79,13 +67,13 @@
             <div class="toggle-with-icon">
                 <i class="toggle-icon round-tiny fa fa-moon bg-red2-dark color-white"></i>
                 <a href="#" class="toggle-switch toggle-ios toggle-off" 
-                   data-toggle-theme
-                   data-toggle-height="27"
-                   data-toggle-width="50"
-                   data-toggle-content="toggle-content-1"
-                   data-toggle-checkbox="toggle-checkbox-1"
-                   data-bg-on="bg-green1-dark" 
-                   data-bg-off="">
+                    data-toggle-theme
+                    data-toggle-height="27"
+                    data-toggle-width="50"
+                    data-toggle-content="toggle-content-1"
+                    data-toggle-checkbox="toggle-checkbox-1"
+                    data-bg-on="bg-green1-dark" 
+                    data-bg-off="">
                     <span class="color-theme regularbold font-13">Dark Mode</span>
                     <strong></strong>
                     <u></u>
@@ -204,103 +192,49 @@
     }
 </script>
 <script>
-    var jwtToken = sessionStorage.getItem('jwtToken');
-    function economy(){
-        $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
-            headers: {
-                'x-access-token': jwtToken
-            },
-            data : {
-                pre : '0'
-            },
-            success: function(data){
-                alert('관심사가 "경제" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
+$.ajax({
+    url: "http://"+currentIp+"/getConnect",
+    type: 'POST',
+    headers: {
+        'x-access-token': jwtToken
+    },
+    data: {},
+    success: function (data) {  //server.js에서 response해서 받은 파싱 값 res.json(JSON.parse(body))해서 res_list 가져옴 
+        var resultList = data.res_list;
+        for (var i = 0; i < resultList.length; i++) {
+            var resultElement = resultList[i];
+            $("#cardList").append(
+                <div class="left-10 right-10">
+                    <div class="blog-categories blog-categories-3 bottom-10">
+                        <div onclick="economy()" ontouchend="economy()"><a id="economy" class="shadow-large round-large"><strong></strong><em>economy</em><span class="bg-red2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/1s.jpg" class="preload-image responsive-image" alt="img"></a></div>
+                        <div onclick="society()" ontouchend="society()"><a  id="society" class="shadow-large round-large"><strong></strong><em>society</em><span class="bg-green2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/2s.jpg" class="preload-image responsive-image" alt="img"></a></div>
+                        <div onclick="living()" ontouchend="living()"><a id="living" class="shadow-large round-large"><strong></strong><em>living culture</em><span class="bg-teal-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/3s.jpg" class="preload-image responsive-image" alt="img"></a></div>
+                        <div onclick="world()" ontouchend="world()"><a id="world" class="shadow-large round-large"><strong></strong><em>world</em><span class="bg-blue2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/4s.jpg" class="preload-image responsive-image" alt="img"></a></div>
+                        <div onclick="politics()" ontouchend="politics()"><a id="politics"  class="shadow-large round-large"><strong></strong><em>politics</em><span class="bg-gray2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/5s.jpg" class="preload-image responsive-image" alt="img"></a></div>
+                        <div onclick="etc()" ontouchend="etc()"><a id="etc" class="shadow-large round-large"><strong></strong><em>etc.</em><span class="bg-blue2-dark opacity-50"></span><img src="images/empty.png" data-src="images/pictures/6s.jpg" class="preload-image responsive-image" alt="img"></a></div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            '    <div data-height="150" style="height : 150px" class="caption caption-margins round-medium shadow-large">\n' +
+            '        <div class="caption-center right-15 top-15 text-right">\n' +
+            '            <Button onclick="getBalance(\'' + resultElement.fintech_use_num + '\')" class="button button-xs button-round-huge bg-highlight">잔액조회</Button>\n' +
+            '            <Button onclick="mainAccount(\'' + String(i) + '\')" class="button button-xs button-round-huge bg-highlight">주계좌설정</Button>\n' +
+            '        </div>\n' +
+            '        <div class="caption-center left-15 text-left">\n' +
+            '            <h1 class="color-white bolder">' + resultElement.bank_name + '</h1>\n' +
+            '            <p class="under-heading color-white opacity-90 bottom-0">\n' +
+            '                ' + resultElement.account_num_masked +
+            '            </p>\n' +
+            '        </div>\n' +
+            '        <div class="caption-overlay bg-black opacity-70"></div>\n' +
+            '        <div class="caption-bg bg-18"></div>\n' +
+            '    </div>\n'
+            )
+        }
+    },
+    error: function(e){
+        alert(e);
     }
-    function society(){
-        $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
-            headers: {
-                'x-access-token': jwtToken
-            },
-            data : {
-                pre : '1'
-            },
-            success: function(data){
-                alert('관심사가 "사회" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
-    }
-    function living(){
-        $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
-            headers: {
-                'x-access-token': jwtToken
-            },
-            data : {
-                pre : '2'
-            },
-            success: function(data){
-                alert('관심사가 "생활 문화" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
-    }
-
-    function politics(){
-        $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
-            headers: {
-                'x-access-token': jwtToken
-            },
-            data : {
-                pre : '3'
-            },
-            success: function(data){
-                alert('관심사가 "정치" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
-    }
-    function world(){
-        $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
-            headers: {
-                'x-access-token': jwtToken
-            },
-            data : {
-                pre : '4'
-            },
-            success: function(data){
-                alert('관심사가 "세계" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
-    }
-    function etc(){
-        $.ajax({
-            url : "http://localhost:3000/changePre",
-            type : 'post',
-            headers: {
-                'x-access-token': jwtToken
-            },
-            data : {
-                pre : '5'
-            },
-            success: function(data){
-                alert('관심사가 "기타" 로 변경되었습니다.');
-                window.location.href = 'http://localhost:3000/main'
-            } 
-         })
-    }
-</script>
+})
+</Script>
 </body>
