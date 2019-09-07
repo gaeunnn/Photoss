@@ -205,7 +205,6 @@ app.get('/connect', function (req, res) {
 
 app.post('/getConnect', auth, function(req,res){
     var userId = req.decoded.userId;
-    console.log(userId);
     connection.query("SELECT * FROM test.friends where userId = '"+userId+"';", function(err, friends, fields){
         res.send(friends);
     })
