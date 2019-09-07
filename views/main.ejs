@@ -257,11 +257,7 @@ function getQueryStringObject() {
 }
 </script>
 <script>
-var socket = io();
-socket.on('message', function (msg) {
-    var result = confirm('승인하시겠습니까?');
-    socket.emit('reMessage', result);
-})
+
 var camera = document.getElementById('camera');
 var frame = document.getElementById('frame');
 
@@ -339,18 +335,6 @@ $("#camera").click(function (event) {
                 window.location.href = '/main?isUser=false'
             }
             else{
-                var receiverName=data.receiver.name;
-                var receiverBank=data.receiver.bank;
-                var receiverAccount= data.receiver.account;
-                var senderName= data.sender.name;
-                var senderBank= data.sender.bank;
-                var senderAccount=data.sender.account;
-                var senderUrl = data.senderUrl;
-                var url = data.url;
- 
-                socket.emit('message special user', { hello: 'world' });
-
-                socket.on('locate',function (){
                     window.location.href=
                     '/remit?receiverName='+data.receiver.name +
                     '&receiverBank='+data.receiver.bank +
@@ -360,7 +344,6 @@ $("#camera").click(function (event) {
                     '&senderAccount='+data.sender.account+
                     '&senderUrl='+data.senderUrl+
                     '&url='+data.url;
-                })
             }
         },
         error: function (e) {

@@ -79,6 +79,11 @@
                 </p>
                 <div class="input-style has-icon input-style-1 input-required">
                     <i class="input-icon fa fa-star font-11"></i>
+                    <span>Main Bank</span>
+                    <input readonly type="name" id="user_bank" placeholder="Main Bank">
+                </div>
+                <div class="input-style has-icon input-style-1 input-required">
+                    <i class="input-icon fa fa-star font-11"></i>
                     <span>Main Account</span>
                     <input readonly type="name" id="user_account" placeholder="Main Account">
                 </div> 
@@ -273,6 +278,7 @@
                 'x-access-token': jwtToken
             },
             data: {
+                userBank: $('#user_bank').val(),
                 userId: $('#user_id').val(),
                 userName: $('#user_name').val(),
                 userEmail: $('#user_email').val(),
@@ -299,6 +305,7 @@
         },
         data: {},
         success: function(data){
+            $('#user_bank').val(data[0].bank);
             $('#user_account').val(data[0].account);
             $('#user_id').val(data[0].id);
             $('#user_name').val(data[0].name)

@@ -1,39 +1,7 @@
 const express = require('express')
 const app = express()
-//app.listen(3000)
-var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
-server.listen(3000,function(){
-    console.log('socekt io server listening on port 3000')
-})
-const connections = [];
-var socketId ='';
+app.listen(3000)
 
-io.sockets.on('connection', function(socket) {
-    connections.push(socket);
-    socketId = socket.id;
-
-    console.log(' %s sockets is connected', connections.length);
-    for(i=0;i<connections.length;i++){
-        console.log((i+1)+"번째 회원: "+connections[i].id);
-        
-    }
-
-    // 접속한 클라이언트의 정보가 수신되면
-    socket.on('disconnect', () => {
-        connections.splice(connections.indexOf(socket), 1);
-    });
-
-    socket.on('message special user', function(data) {
-        io.to(connections[1].id).emit('message', connections[1].id);    
-    });
-
-    socket.on('reMessage', (data) => {
-        if(data==true){
-            io.to(connections[0].id).emit('locate',data);
-        }
-    });
-});
 
 var path = require('path'); 
 var mysql = require('mysql');
@@ -115,18 +83,8 @@ app.post('/login', function (req, res) {
     })
 })
 
-app.get('/main', auth, function (req, res) {
-    res.render('main');
-    var userId = req.decoded.userId;
-    var userSocket = socketId;
-    var sql="UPDATE test.account SET socketId = ? WHERE (id = ?);"
-
-    connection.query(sql,[userSocket,userId],function(err,result){
-        if (err) {
-            throw err;
-        }
-    });
-        
+app.get('/main', function (req, res) {
+    res.render('main');      
 })
 
 app.post('/uploadfile', auth, upload.single('myFile'), (req, res, next) => {
@@ -152,7 +110,7 @@ app.post('/uploadfile', auth, upload.single('myFile'), (req, res, next) => {
 
     var option = {
         method : "POST",
-        url : "http://192.168.0.26:5000/sendImg",
+        url : "http://192.168.0.21:5000/sendImg",
         form : {
             ImgPath : "http://"+ip.address()+":3000/uploads/"+ file.originalname,
             originalname : file.originalname,
